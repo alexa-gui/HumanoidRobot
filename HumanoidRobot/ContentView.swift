@@ -71,7 +71,7 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 120)
+                    .padding(.top, 140)
                     .offset(y: 0)
                     
                     // 模块化机器人3D模型
@@ -922,7 +922,7 @@ struct KnowledgeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(2)
                     }
-                    .padding(.top, 120)
+                    .padding(.top, 140)
                     .offset(y: 0)
                     
                     // 知识分类
@@ -1463,7 +1463,7 @@ struct RobotSelectionView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 120)
+                    .padding(.top, 140)
                     .offset(y: 0)
                     
                     Spacer()
