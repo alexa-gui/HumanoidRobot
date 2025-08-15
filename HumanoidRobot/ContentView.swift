@@ -133,7 +133,7 @@ struct HomeView: View {
                         StatCard(title: "Categories", value: "6", icon: "folder.fill")
                         StatCard(title: "Custom", value: "∞", icon: "infinity")
                     }
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 100) // 增加底部间距避免Tab重叠
                 }
             }
             .navigationBarHidden(true)
@@ -261,31 +261,63 @@ struct ModularRobot3DView: UIViewRepresentable {
     private func createModularHead() -> SCNNode {
         let headNode = SCNNode()
         
-        // 头部主体
-        let headGeometry = SCNBox(width: 0.4, height: 0.4, length: 0.4, chamferRadius: 0.05)
+        // 头部主体 - 科幻六边形设计
+        let headGeometry = SCNBox(width: 0.35, height: 0.45, length: 0.35, chamferRadius: 0.08)
         let headMaterial = SCNMaterial()
-        headMaterial.diffuse.contents = UIColor.systemBlue
-        headMaterial.metalness.contents = 0.8
-        headMaterial.roughness.contents = 0.2
+        headMaterial.diffuse.contents = UIColor(red: 0.1, green: 0.1, blue: 0.2, alpha: 1.0)
+        headMaterial.metalness.contents = 0.9
+        headMaterial.roughness.contents = 0.1
+        headMaterial.reflective.contents = UIColor.white
         headGeometry.materials = [headMaterial]
         
         let headBodyNode = SCNNode(geometry: headGeometry)
         headNode.addChildNode(headBodyNode)
         
-        // 眼睛
-        let eyeGeometry = SCNSphere(radius: 0.05)
+        // 科幻眼睛 - 全息投影效果
+        let eyeGeometry = SCNCylinder(radius: 0.06, height: 0.02)
         let eyeMaterial = SCNMaterial()
         eyeMaterial.diffuse.contents = UIColor.cyan
         eyeMaterial.emission.contents = UIColor.cyan
+        eyeMaterial.transparency = 0.8
         eyeGeometry.materials = [eyeMaterial]
         
         let leftEye = SCNNode(geometry: eyeGeometry)
-        leftEye.position = SCNVector3(-0.1, 0.05, 0.15)
+        leftEye.position = SCNVector3(-0.12, 0.05, 0.18)
+        leftEye.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
         headNode.addChildNode(leftEye)
         
         let rightEye = SCNNode(geometry: eyeGeometry)
-        rightEye.position = SCNVector3(0.1, 0.05, 0.15)
+        rightEye.position = SCNVector3(0.12, 0.05, 0.18)
+        rightEye.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
         headNode.addChildNode(rightEye)
+        
+        // 中央传感器
+        let sensorGeometry = SCNCylinder(radius: 0.03, height: 0.01)
+        let sensorMaterial = SCNMaterial()
+        sensorMaterial.diffuse.contents = UIColor.purple
+        sensorMaterial.emission.contents = UIColor.purple
+        sensorMaterial.transparency = 0.9
+        sensorGeometry.materials = [sensorMaterial]
+        
+        let sensor = SCNNode(geometry: sensorGeometry)
+        sensor.position = SCNVector3(0, 0.15, 0.18)
+        sensor.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        headNode.addChildNode(sensor)
+        
+        // 头部装饰线条
+        let lineGeometry = SCNBox(width: 0.3, height: 0.02, length: 0.01, chamferRadius: 0.005)
+        let lineMaterial = SCNMaterial()
+        lineMaterial.diffuse.contents = UIColor.cyan
+        lineMaterial.emission.contents = UIColor.cyan
+        lineGeometry.materials = [lineMaterial]
+        
+        let topLine = SCNNode(geometry: lineGeometry)
+        topLine.position = SCNVector3(0, 0.22, 0.15)
+        headNode.addChildNode(topLine)
+        
+        let bottomLine = SCNNode(geometry: lineGeometry)
+        bottomLine.position = SCNVector3(0, -0.18, 0.15)
+        headNode.addChildNode(bottomLine)
         
         return headNode
     }
@@ -293,27 +325,72 @@ struct ModularRobot3DView: UIViewRepresentable {
     private func createModularTorso() -> SCNNode {
         let torsoNode = SCNNode()
         
-        // 躯干主体
-        let torsoGeometry = SCNBox(width: 0.6, height: 0.8, length: 0.3, chamferRadius: 0.05)
+        // 躯干主体 - 科幻装甲设计
+        let torsoGeometry = SCNBox(width: 0.55, height: 0.85, length: 0.25, chamferRadius: 0.1)
         let torsoMaterial = SCNMaterial()
-        torsoMaterial.diffuse.contents = UIColor.systemGray
-        torsoMaterial.metalness.contents = 0.7
-        torsoMaterial.roughness.contents = 0.3
+        torsoMaterial.diffuse.contents = UIColor(red: 0.15, green: 0.15, blue: 0.25, alpha: 1.0)
+        torsoMaterial.metalness.contents = 0.95
+        torsoMaterial.roughness.contents = 0.05
+        torsoMaterial.reflective.contents = UIColor.white
         torsoGeometry.materials = [torsoMaterial]
         
         let torsoBodyNode = SCNNode(geometry: torsoGeometry)
         torsoNode.addChildNode(torsoBodyNode)
         
-        // 胸部面板
-        let panelGeometry = SCNBox(width: 0.4, height: 0.3, length: 0.02, chamferRadius: 0.01)
-        let panelMaterial = SCNMaterial()
-        panelMaterial.diffuse.contents = UIColor.systemBlue
-        panelMaterial.metalness.contents = 0.9
-        panelGeometry.materials = [panelMaterial]
+        // 中央能量核心
+        let coreGeometry = SCNCylinder(radius: 0.08, height: 0.15)
+        let coreMaterial = SCNMaterial()
+        coreMaterial.diffuse.contents = UIColor.cyan
+        coreMaterial.emission.contents = UIColor.cyan
+        coreMaterial.transparency = 0.7
+        coreGeometry.materials = [coreMaterial]
         
-        let panelNode = SCNNode(geometry: panelGeometry)
-        panelNode.position = SCNVector3(0, 0.1, 0.16)
-        torsoNode.addChildNode(panelNode)
+        let core = SCNNode(geometry: coreGeometry)
+        core.position = SCNVector3(0, 0.1, 0.13)
+        core.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        torsoNode.addChildNode(core)
+        
+        // 能量核心光环
+        let ringGeometry = SCNTorus(ringRadius: 0.12, pipeRadius: 0.01)
+        let ringMaterial = SCNMaterial()
+        ringMaterial.diffuse.contents = UIColor.cyan
+        ringMaterial.emission.contents = UIColor.cyan
+        ringGeometry.materials = [ringMaterial]
+        
+        let ring = SCNNode(geometry: ringGeometry)
+        ring.position = SCNVector3(0, 0.1, 0.13)
+        ring.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        torsoNode.addChildNode(ring)
+        
+        // 装甲板
+        let armorGeometry = SCNBox(width: 0.45, height: 0.2, length: 0.02, chamferRadius: 0.01)
+        let armorMaterial = SCNMaterial()
+        armorMaterial.diffuse.contents = UIColor(red: 0.2, green: 0.2, blue: 0.3, alpha: 1.0)
+        armorMaterial.metalness.contents = 0.9
+        armorGeometry.materials = [armorMaterial]
+        
+        let topArmor = SCNNode(geometry: armorGeometry)
+        topArmor.position = SCNVector3(0, 0.3, 0.13)
+        torsoNode.addChildNode(topArmor)
+        
+        let bottomArmor = SCNNode(geometry: armorGeometry)
+        bottomArmor.position = SCNVector3(0, -0.2, 0.13)
+        torsoNode.addChildNode(bottomArmor)
+        
+        // 装饰线条
+        let lineGeometry = SCNBox(width: 0.5, height: 0.02, length: 0.01, chamferRadius: 0.005)
+        let lineMaterial = SCNMaterial()
+        lineMaterial.diffuse.contents = UIColor.cyan
+        lineMaterial.emission.contents = UIColor.cyan
+        lineGeometry.materials = [lineMaterial]
+        
+        let topLine = SCNNode(geometry: lineGeometry)
+        topLine.position = SCNVector3(0, 0.4, 0.12)
+        torsoNode.addChildNode(topLine)
+        
+        let bottomLine = SCNNode(geometry: lineGeometry)
+        bottomLine.position = SCNVector3(0, -0.4, 0.12)
+        torsoNode.addChildNode(bottomLine)
         
         return torsoNode
     }
@@ -321,36 +398,88 @@ struct ModularRobot3DView: UIViewRepresentable {
     private func createModularArm(isLeft: Bool) -> SCNNode {
         let armNode = SCNNode()
         
-        // 上臂
-        let upperArmGeometry = SCNCapsule(capRadius: 0.08, height: 0.4)
+        // 上臂 - 科幻装甲设计
+        let upperArmGeometry = SCNCapsule(capRadius: 0.09, height: 0.42)
         let armMaterial = SCNMaterial()
-        armMaterial.diffuse.contents = UIColor.systemGray
-        armMaterial.metalness.contents = 0.6
+        armMaterial.diffuse.contents = UIColor(red: 0.2, green: 0.2, blue: 0.3, alpha: 1.0)
+        armMaterial.metalness.contents = 0.9
+        armMaterial.roughness.contents = 0.1
         upperArmGeometry.materials = [armMaterial]
         
         let upperArmNode = SCNNode(geometry: upperArmGeometry)
         upperArmNode.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/4 : -Float.pi/4)
         armNode.addChildNode(upperArmNode)
         
+        // 上臂装甲板
+        let upperArmorGeometry = SCNBox(width: 0.15, height: 0.35, length: 0.02, chamferRadius: 0.01)
+        let armorMaterial = SCNMaterial()
+        armorMaterial.diffuse.contents = UIColor(red: 0.25, green: 0.25, blue: 0.35, alpha: 1.0)
+        armorMaterial.metalness.contents = 0.95
+        upperArmorGeometry.materials = [armorMaterial]
+        
+        let upperArmor = SCNNode(geometry: upperArmorGeometry)
+        upperArmor.position = SCNVector3(isLeft ? -0.05 : 0.05, -0.02, 0.1)
+        upperArmor.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/4 : -Float.pi/4)
+        armNode.addChildNode(upperArmor)
+        
         // 前臂
-        let forearmGeometry = SCNCapsule(capRadius: 0.06, height: 0.3)
+        let forearmGeometry = SCNCapsule(capRadius: 0.07, height: 0.32)
         forearmGeometry.materials = [armMaterial]
         
         let forearmNode = SCNNode(geometry: forearmGeometry)
-        forearmNode.position = SCNVector3(isLeft ? -0.2 : 0.2, -0.15, 0)
+        forearmNode.position = SCNVector3(isLeft ? -0.22 : 0.22, -0.18, 0)
         forearmNode.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/6 : -Float.pi/6)
         armNode.addChildNode(forearmNode)
         
-        // 手部
-        let handGeometry = SCNBox(width: 0.12, height: 0.08, length: 0.15, chamferRadius: 0.02)
+        // 前臂装甲板
+        let forearmArmorGeometry = SCNBox(width: 0.12, height: 0.25, length: 0.02, chamferRadius: 0.01)
+        forearmArmorGeometry.materials = [armorMaterial]
+        
+        let forearmArmor = SCNNode(geometry: forearmArmorGeometry)
+        forearmArmor.position = SCNVector3(isLeft ? -0.33 : 0.33, -0.25, 0.08)
+        forearmArmor.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/6 : -Float.pi/6)
+        armNode.addChildNode(forearmArmor)
+        
+        // 科幻手部
+        let handGeometry = SCNBox(width: 0.14, height: 0.1, length: 0.18, chamferRadius: 0.03)
         let handMaterial = SCNMaterial()
-        handMaterial.diffuse.contents = UIColor.systemBlue
-        handMaterial.metalness.contents = 0.8
+        handMaterial.diffuse.contents = UIColor(red: 0.15, green: 0.15, blue: 0.25, alpha: 1.0)
+        handMaterial.metalness.contents = 0.95
+        handMaterial.roughness.contents = 0.05
         handGeometry.materials = [handMaterial]
         
         let handNode = SCNNode(geometry: handGeometry)
-        handNode.position = SCNVector3(isLeft ? -0.35 : 0.35, -0.25, 0)
+        handNode.position = SCNVector3(isLeft ? -0.38 : 0.38, -0.32, 0)
         armNode.addChildNode(handNode)
+        
+        // 手部能量核心
+        let handCoreGeometry = SCNCylinder(radius: 0.02, height: 0.05)
+        let handCoreMaterial = SCNMaterial()
+        handCoreMaterial.diffuse.contents = UIColor.cyan
+        handCoreMaterial.emission.contents = UIColor.cyan
+        handCoreGeometry.materials = [handCoreMaterial]
+        
+        let handCore = SCNNode(geometry: handCoreGeometry)
+        handCore.position = SCNVector3(isLeft ? -0.38 : 0.38, -0.32, 0.09)
+        handCore.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        armNode.addChildNode(handCore)
+        
+        // 关节装饰
+        let jointGeometry = SCNTorus(ringRadius: 0.1, pipeRadius: 0.01)
+        let jointMaterial = SCNMaterial()
+        jointMaterial.diffuse.contents = UIColor.cyan
+        jointMaterial.emission.contents = UIColor.cyan
+        jointGeometry.materials = [jointMaterial]
+        
+        let shoulderJoint = SCNNode(geometry: jointGeometry)
+        shoulderJoint.position = SCNVector3(isLeft ? -0.05 : 0.05, 0.1, 0)
+        shoulderJoint.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        armNode.addChildNode(shoulderJoint)
+        
+        let elbowJoint = SCNNode(geometry: jointGeometry)
+        elbowJoint.position = SCNVector3(isLeft ? -0.22 : 0.22, -0.18, 0)
+        elbowJoint.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        armNode.addChildNode(elbowJoint)
         
         return armNode
     }
@@ -358,34 +487,89 @@ struct ModularRobot3DView: UIViewRepresentable {
     private func createModularLeg(isLeft: Bool) -> SCNNode {
         let legNode = SCNNode()
         
-        // 大腿
-        let thighGeometry = SCNCapsule(capRadius: 0.1, height: 0.5)
+        // 大腿 - 科幻装甲设计
+        let thighGeometry = SCNCapsule(capRadius: 0.11, height: 0.52)
         let legMaterial = SCNMaterial()
-        legMaterial.diffuse.contents = UIColor.systemGray
-        legMaterial.metalness.contents = 0.6
+        legMaterial.diffuse.contents = UIColor(red: 0.2, green: 0.2, blue: 0.3, alpha: 1.0)
+        legMaterial.metalness.contents = 0.9
+        legMaterial.roughness.contents = 0.1
         thighGeometry.materials = [legMaterial]
         
         let thighNode = SCNNode(geometry: thighGeometry)
         legNode.addChildNode(thighNode)
         
+        // 大腿装甲板
+        let thighArmorGeometry = SCNBox(width: 0.18, height: 0.4, length: 0.02, chamferRadius: 0.01)
+        let armorMaterial = SCNMaterial()
+        armorMaterial.diffuse.contents = UIColor(red: 0.25, green: 0.25, blue: 0.35, alpha: 1.0)
+        armorMaterial.metalness.contents = 0.95
+        thighArmorGeometry.materials = [armorMaterial]
+        
+        let thighArmor = SCNNode(geometry: thighArmorGeometry)
+        thighArmor.position = SCNVector3(0, 0.02, 0.11)
+        legNode.addChildNode(thighArmor)
+        
         // 小腿
-        let calfGeometry = SCNCapsule(capRadius: 0.08, height: 0.4)
+        let calfGeometry = SCNCapsule(capRadius: 0.09, height: 0.42)
         calfGeometry.materials = [legMaterial]
         
         let calfNode = SCNNode(geometry: calfGeometry)
-        calfNode.position = SCNVector3(0, -0.45, 0)
+        calfNode.position = SCNVector3(0, -0.47, 0)
         legNode.addChildNode(calfNode)
         
-        // 脚部
-        let footGeometry = SCNBox(width: 0.15, height: 0.08, length: 0.25, chamferRadius: 0.02)
+        // 小腿装甲板
+        let calfArmorGeometry = SCNBox(width: 0.15, height: 0.3, length: 0.02, chamferRadius: 0.01)
+        calfArmorGeometry.materials = [armorMaterial]
+        
+        let calfArmor = SCNNode(geometry: calfArmorGeometry)
+        calfArmor.position = SCNVector3(0, -0.47, 0.09)
+        legNode.addChildNode(calfArmor)
+        
+        // 科幻脚部
+        let footGeometry = SCNBox(width: 0.18, height: 0.1, length: 0.28, chamferRadius: 0.03)
         let footMaterial = SCNMaterial()
-        footMaterial.diffuse.contents = UIColor.systemBlue
-        footMaterial.metalness.contents = 0.8
+        footMaterial.diffuse.contents = UIColor(red: 0.15, green: 0.15, blue: 0.25, alpha: 1.0)
+        footMaterial.metalness.contents = 0.95
+        footMaterial.roughness.contents = 0.05
         footGeometry.materials = [footMaterial]
         
         let footNode = SCNNode(geometry: footGeometry)
-        footNode.position = SCNVector3(0, -0.65, 0.05)
+        footNode.position = SCNVector3(0, -0.68, 0.06)
         legNode.addChildNode(footNode)
+        
+        // 脚部推进器
+        let thrusterGeometry = SCNCylinder(radius: 0.03, height: 0.02)
+        let thrusterMaterial = SCNMaterial()
+        thrusterMaterial.diffuse.contents = UIColor.orange
+        thrusterMaterial.emission.contents = UIColor.orange
+        thrusterGeometry.materials = [thrusterMaterial]
+        
+        let leftThruster = SCNNode(geometry: thrusterGeometry)
+        leftThruster.position = SCNVector3(-0.06, -0.68, 0.15)
+        leftThruster.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        legNode.addChildNode(leftThruster)
+        
+        let rightThruster = SCNNode(geometry: thrusterGeometry)
+        rightThruster.position = SCNVector3(0.06, -0.68, 0.15)
+        rightThruster.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        legNode.addChildNode(rightThruster)
+        
+        // 关节装饰
+        let jointGeometry = SCNTorus(ringRadius: 0.12, pipeRadius: 0.01)
+        let jointMaterial = SCNMaterial()
+        jointMaterial.diffuse.contents = UIColor.cyan
+        jointMaterial.emission.contents = UIColor.cyan
+        jointGeometry.materials = [jointMaterial]
+        
+        let hipJoint = SCNNode(geometry: jointGeometry)
+        hipJoint.position = SCNVector3(0, 0.25, 0)
+        hipJoint.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        legNode.addChildNode(hipJoint)
+        
+        let kneeJoint = SCNNode(geometry: jointGeometry)
+        kneeJoint.position = SCNVector3(0, -0.25, 0)
+        kneeJoint.eulerAngles = SCNVector3(Float.pi/2, 0, 0)
+        legNode.addChildNode(kneeJoint)
         
         return legNode
     }
@@ -1266,56 +1450,59 @@ struct KnowledgeSection: View {
 // 机器人选择主页 (Robots Tab)
 struct RobotSelectionView: View {
     var body: some View {
-        ZStack {
-            // 赛博朋克背景
-            CyberpunkBackground()
-            
-            VStack(spacing: 30) {
-                // 标题
-                VStack(spacing: 10) {
-                    Text("ROBOT")
-                        .font(.system(size: 48, weight: .black, design: .monospaced))
-                        .foregroundStyle(
-                            LinearGradient(
-                                colors: [Color.mint, Color.cyan, Color.blue],
-                                startPoint: .leading,
-                                endPoint: .trailing
+        NavigationView {
+            ZStack {
+                // 赛博朋克背景
+                CyberpunkBackground()
+                
+                VStack(spacing: 30) {
+                    // 标题
+                    VStack(spacing: 10) {
+                        Text("ROBOT")
+                            .font(.system(size: 48, weight: .black, design: .monospaced))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [Color.mint, Color.cyan, Color.blue],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                    
-                    Text("COLLECTION")
-                        .font(.system(size: 18, weight: .medium, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.8))
-                        .tracking(3)
-                }
-                .padding(.top, 50)
-                
-                Spacer()
-                
-                // 机器人选择网格
-                LazyVGrid(columns: [
-                    GridItem(.flexible()),
-                    GridItem(.flexible())
-                ], spacing: 20) {
-                    ForEach(RobotType.allCases, id: \.self) { robot in
-                        NavigationLink(destination: RobotDetailView(robot: robot)) {
-                            RobotCard(robot: robot)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        
+                        Text("COLLECTION")
+                            .font(.system(size: 18, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                            .tracking(3)
                     }
+                    .padding(.top, 50)
+                    
+                    Spacer()
+                    
+                    // 机器人选择网格
+                    LazyVGrid(columns: [
+                        GridItem(.flexible()),
+                        GridItem(.flexible())
+                    ], spacing: 20) {
+                        ForEach(RobotType.allCases, id: \.self) { robot in
+                            NavigationLink(destination: RobotDetailView(robot: robot)) {
+                                RobotCard(robot: robot)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    Spacer()
+                    
+                    Text("SELECT YOUR ROBOT")
+                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.6))
+                        .tracking(2)
+                        .padding(.bottom, 30)
                 }
-                .padding(.horizontal, 20)
-                
-                Spacer()
-                
-                Text("SELECT YOUR ROBOT")
-                    .font(.system(size: 14, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.6))
-                    .tracking(2)
-                    .padding(.bottom, 30)
             }
+            .navigationBarHidden(true)
         }
-        .navigationBarHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
