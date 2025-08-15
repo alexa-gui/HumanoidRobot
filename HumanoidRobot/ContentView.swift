@@ -88,7 +88,6 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.6))
                     }
                     .padding(.horizontal, 20)
-                    .offset(y: -60)
                     
                     // 组装按钮
                     Button(action: {
@@ -966,7 +965,7 @@ struct KnowledgeView: View {
                             KnowledgeCategoryCard(
                                 title: "Datasets & Benchmarks",
                                 subtitle: "训练数据、评估标准、基准测试",
-                                icon: "database.fill",
+                                icon: "externaldrive.fill",
                                 color: .cyan
                             )
                             
