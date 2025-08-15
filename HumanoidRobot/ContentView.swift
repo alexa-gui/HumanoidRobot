@@ -9,30 +9,30 @@ import SwiftUI
 import SceneKit
 
 struct ContentView: View {
-    @State private var selectedTab = 0
+    @State private var selectedTab = 1 // 默认选中Home
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Tab 1: Home - 通用机器人模型
+            // Tab 1: Robot Models - 各家公司机器人模型
+            RobotSelectionView()
+                .tabItem {
+                    Image(systemName: "cube.box")
+                    Text("Models")
+                }
+                .tag(0)
+            
+            // Tab 2: Home - 模块化组装 (中间)
             HomeView()
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Home")
-                }
-                .tag(0)
-            
-            // Tab 2: Robots - 各家公司机器人模型
-            RobotSelectionView()
-                .tabItem {
-                    Image(systemName: "robot")
-                    Text("Robots")
                 }
                 .tag(1)
             
             // Tab 3: Knowledge - 硬核科技知识
             KnowledgeView()
                 .tabItem {
-                    Image(systemName: "brain.head.profile")
+                    Image(systemName: "book.fill")
                     Text("Knowledge")
                 }
                 .tag(2)
@@ -42,8 +42,9 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Home Tab - 通用机器人模型
+// MARK: - Home Tab - 模块化组装
 struct HomeView: View {
+    @State private var showingAssemblyView = false
     @State private var showingRobotDetail = false
     
     var body: some View {
@@ -55,7 +56,7 @@ struct HomeView: View {
                 VStack(spacing: 30) {
                     // 标题
                     VStack(spacing: 10) {
-                        Text("HUMANOID")
+                        Text("MODULAR")
                             .font(.system(size: 48, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
@@ -65,7 +66,7 @@ struct HomeView: View {
                                 )
                             )
                         
-                        Text("AI PLATFORM")
+                        Text("ASSEMBLY")
                             .font(.system(size: 18, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
@@ -74,23 +75,19 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    // 通用机器人3D模型
+                    // 模块化机器人3D模型
                     VStack(spacing: 20) {
-                        Text("UNIVERSAL ROBOT")
+                        Text("CUSTOM ROBOT")
                             .font(.system(size: 24, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
                             .tracking(2)
                         
                         // 3D机器人视图
-                        Robot3DView(
-                            robot: .teslaOptimus,
-                            selectedPart: .constant(nil),
-                            showingDetail: .constant(false)
-                        )
-                        .frame(height: 400)
-                        .onTapGesture {
-                            showingRobotDetail = true
-                        }
+                        ModularRobot3DView()
+                            .frame(height: 400)
+                            .onTapGesture {
+                                showingRobotDetail = true
+                            }
                         
                         Text("Tap to explore")
                             .font(.system(size: 14, weight: .medium))
@@ -100,18 +97,51 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    // 快速统计
+                    // 组装按钮
+                    Button(action: {
+                        showingAssemblyView = true
+                    }) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "gearshape.2.fill")
+                                .font(.system(size: 20))
+                            Text("ASSEMBLE ROBOT")
+                                .font(.system(size: 16, weight: .semibold, design: .monospaced))
+                                .tracking(1)
+                        }
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 30)
+                        .padding(.vertical, 15)
+                        .background(
+                            RoundedRectangle(cornerRadius: 25)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [Color.cyan, Color.blue],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                        )
+                    }
+                    
+                    // 模块统计
                     HStack(spacing: 30) {
-                        StatCard(title: "Models", value: "4", icon: "cube.fill")
-                        StatCard(title: "Categories", value: "8", icon: "folder.fill")
-                        StatCard(title: "Papers", value: "50+", icon: "doc.text.fill")
+                        StatCard(title: "Components", value: "12", icon: "gearshape")
+                        StatCard(title: "Categories", value: "6", icon: "folder.fill")
+                        StatCard(title: "Custom", value: "∞", icon: "infinity")
                     }
                     .padding(.bottom, 30)
                 }
             }
             .navigationBarHidden(true)
             .sheet(isPresented: $showingRobotDetail) {
-                UniversalRobotDetailView()
+                ModularRobotDetailView()
+            }
+            .sheet(isPresented: $showingAssemblyView) {
+                RobotAssemblyView()
             }
         }
     }
@@ -149,8 +179,220 @@ struct StatCard: View {
     }
 }
 
-// 通用机器人详情页
-struct UniversalRobotDetailView: View {
+// 模块化机器人3D视图
+struct ModularRobot3DView: UIViewRepresentable {
+    func makeUIView(context: Context) -> SCNView {
+        let sceneView = SCNView()
+        sceneView.scene = createModularRobotScene()
+        sceneView.backgroundColor = UIColor.clear
+        sceneView.allowsCameraControl = true
+        sceneView.cameraControlConfiguration.allowsTranslation = true
+        sceneView.cameraControlConfiguration.autoSwitchToFreeCamera = true
+        
+        return sceneView
+    }
+    
+    func updateUIView(_ uiView: SCNView, context: Context) {}
+    
+    private func createModularRobotScene() -> SCNScene {
+        let scene = SCNScene()
+        
+        // 创建模块化机器人
+        let robotNode = createModularRobot()
+        scene.rootNode.addChildNode(robotNode)
+        
+        // 设置相机
+        let cameraNode = SCNNode()
+        cameraNode.camera = SCNCamera()
+        cameraNode.position = SCNVector3(0, 2, 5)
+        scene.rootNode.addChildNode(cameraNode)
+        
+        // 设置灯光
+        let ambientLight = SCNNode()
+        ambientLight.light = SCNLight()
+        ambientLight.light?.type = .ambient
+        ambientLight.light?.intensity = 100
+        scene.rootNode.addChildNode(ambientLight)
+        
+        let directionalLight = SCNNode()
+        directionalLight.light = SCNLight()
+        directionalLight.light?.type = .directional
+        directionalLight.light?.intensity = 800
+        directionalLight.position = SCNVector3(5, 5, 5)
+        scene.rootNode.addChildNode(directionalLight)
+        
+        return scene
+    }
+    
+    private func createModularRobot() -> SCNNode {
+        let robotNode = SCNNode()
+        
+        // 头部模块
+        let headNode = createModularHead()
+        headNode.position = SCNVector3(0, 1.8, 0)
+        robotNode.addChildNode(headNode)
+        
+        // 躯干模块
+        let torsoNode = createModularTorso()
+        torsoNode.position = SCNVector3(0, 1.2, 0)
+        robotNode.addChildNode(torsoNode)
+        
+        // 手臂模块
+        let leftArmNode = createModularArm(isLeft: true)
+        leftArmNode.position = SCNVector3(-0.8, 1.2, 0)
+        robotNode.addChildNode(leftArmNode)
+        
+        let rightArmNode = createModularArm(isLeft: false)
+        rightArmNode.position = SCNVector3(0.8, 1.2, 0)
+        robotNode.addChildNode(rightArmNode)
+        
+        // 腿部模块
+        let leftLegNode = createModularLeg(isLeft: true)
+        leftLegNode.position = SCNVector3(-0.3, 0.3, 0)
+        robotNode.addChildNode(leftLegNode)
+        
+        let rightLegNode = createModularLeg(isLeft: false)
+        rightLegNode.position = SCNVector3(0.3, 0.3, 0)
+        robotNode.addChildNode(rightLegNode)
+        
+        return robotNode
+    }
+    
+    private func createModularHead() -> SCNNode {
+        let headNode = SCNNode()
+        
+        // 头部主体
+        let headGeometry = SCNBox(width: 0.4, height: 0.4, length: 0.4, chamferRadius: 0.05)
+        let headMaterial = SCNMaterial()
+        headMaterial.diffuse.contents = UIColor.systemBlue
+        headMaterial.metalness.contents = 0.8
+        headMaterial.roughness.contents = 0.2
+        headGeometry.materials = [headMaterial]
+        
+        let headBodyNode = SCNNode(geometry: headGeometry)
+        headNode.addChildNode(headBodyNode)
+        
+        // 眼睛
+        let eyeGeometry = SCNSphere(radius: 0.05)
+        let eyeMaterial = SCNMaterial()
+        eyeMaterial.diffuse.contents = UIColor.cyan
+        eyeMaterial.emission.contents = UIColor.cyan
+        eyeGeometry.materials = [eyeMaterial]
+        
+        let leftEye = SCNNode(geometry: eyeGeometry)
+        leftEye.position = SCNVector3(-0.1, 0.05, 0.15)
+        headNode.addChildNode(leftEye)
+        
+        let rightEye = SCNNode(geometry: eyeGeometry)
+        rightEye.position = SCNVector3(0.1, 0.05, 0.15)
+        headNode.addChildNode(rightEye)
+        
+        return headNode
+    }
+    
+    private func createModularTorso() -> SCNNode {
+        let torsoNode = SCNNode()
+        
+        // 躯干主体
+        let torsoGeometry = SCNBox(width: 0.6, height: 0.8, length: 0.3, chamferRadius: 0.05)
+        let torsoMaterial = SCNMaterial()
+        torsoMaterial.diffuse.contents = UIColor.systemGray
+        torsoMaterial.metalness.contents = 0.7
+        torsoMaterial.roughness.contents = 0.3
+        torsoGeometry.materials = [torsoMaterial]
+        
+        let torsoBodyNode = SCNNode(geometry: torsoGeometry)
+        torsoNode.addChildNode(torsoBodyNode)
+        
+        // 胸部面板
+        let panelGeometry = SCNBox(width: 0.4, height: 0.3, length: 0.02, chamferRadius: 0.01)
+        let panelMaterial = SCNMaterial()
+        panelMaterial.diffuse.contents = UIColor.systemBlue
+        panelMaterial.metalness.contents = 0.9
+        panelGeometry.materials = [panelMaterial]
+        
+        let panelNode = SCNNode(geometry: panelGeometry)
+        panelNode.position = SCNVector3(0, 0.1, 0.16)
+        torsoNode.addChildNode(panelNode)
+        
+        return torsoNode
+    }
+    
+    private func createModularArm(isLeft: Bool) -> SCNNode {
+        let armNode = SCNNode()
+        
+        // 上臂
+        let upperArmGeometry = SCNCapsule(capRadius: 0.08, height: 0.4)
+        let armMaterial = SCNMaterial()
+        armMaterial.diffuse.contents = UIColor.systemGray
+        armMaterial.metalness.contents = 0.6
+        upperArmGeometry.materials = [armMaterial]
+        
+        let upperArmNode = SCNNode(geometry: upperArmGeometry)
+        upperArmNode.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/4 : -Float.pi/4)
+        armNode.addChildNode(upperArmNode)
+        
+        // 前臂
+        let forearmGeometry = SCNCapsule(capRadius: 0.06, height: 0.3)
+        forearmGeometry.materials = [armMaterial]
+        
+        let forearmNode = SCNNode(geometry: forearmGeometry)
+        forearmNode.position = SCNVector3(isLeft ? -0.2 : 0.2, -0.15, 0)
+        forearmNode.eulerAngles = SCNVector3(0, 0, isLeft ? Float.pi/6 : -Float.pi/6)
+        armNode.addChildNode(forearmNode)
+        
+        // 手部
+        let handGeometry = SCNBox(width: 0.12, height: 0.08, length: 0.15, chamferRadius: 0.02)
+        let handMaterial = SCNMaterial()
+        handMaterial.diffuse.contents = UIColor.systemBlue
+        handMaterial.metalness.contents = 0.8
+        handGeometry.materials = [handMaterial]
+        
+        let handNode = SCNNode(geometry: handGeometry)
+        handNode.position = SCNVector3(isLeft ? -0.35 : 0.35, -0.25, 0)
+        armNode.addChildNode(handNode)
+        
+        return armNode
+    }
+    
+    private func createModularLeg(isLeft: Bool) -> SCNNode {
+        let legNode = SCNNode()
+        
+        // 大腿
+        let thighGeometry = SCNCapsule(capRadius: 0.1, height: 0.5)
+        let legMaterial = SCNMaterial()
+        legMaterial.diffuse.contents = UIColor.systemGray
+        legMaterial.metalness.contents = 0.6
+        thighGeometry.materials = [legMaterial]
+        
+        let thighNode = SCNNode(geometry: thighGeometry)
+        legNode.addChildNode(thighNode)
+        
+        // 小腿
+        let calfGeometry = SCNCapsule(capRadius: 0.08, height: 0.4)
+        calfGeometry.materials = [legMaterial]
+        
+        let calfNode = SCNNode(geometry: calfGeometry)
+        calfNode.position = SCNVector3(0, -0.45, 0)
+        legNode.addChildNode(calfNode)
+        
+        // 脚部
+        let footGeometry = SCNBox(width: 0.15, height: 0.08, length: 0.25, chamferRadius: 0.02)
+        let footMaterial = SCNMaterial()
+        footMaterial.diffuse.contents = UIColor.systemBlue
+        footMaterial.metalness.contents = 0.8
+        footGeometry.materials = [footMaterial]
+        
+        let footNode = SCNNode(geometry: footGeometry)
+        footNode.position = SCNVector3(0, -0.65, 0.05)
+        legNode.addChildNode(footNode)
+        
+        return legNode
+    }
+}
+
+// 模块化机器人详情页
+struct ModularRobotDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -161,41 +403,39 @@ struct UniversalRobotDetailView: View {
                 ScrollView {
                     VStack(spacing: 30) {
                         // 3D模型
-                        Robot3DView(
-                            robot: .teslaOptimus,
-                            selectedPart: .constant(nil),
-                            showingDetail: .constant(false)
-                        )
-                        .frame(height: 300)
+                        ModularRobot3DView()
+                            .frame(height: 300)
                         
-                        // 技术规格
+                        // 模块信息
                         VStack(spacing: 20) {
-                            Text("TECHNICAL SPECIFICATIONS")
+                            Text("MODULAR COMPONENTS")
                                 .font(.system(size: 20, weight: .bold, design: .monospaced))
                                 .foregroundColor(.white)
                                 .tracking(2)
                             
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                                SpecCard(title: "Height", value: "1.7m", icon: "ruler")
-                                SpecCard(title: "Weight", value: "60kg", icon: "scalemass")
-                                SpecCard(title: "DOF", value: "32", icon: "gearshape")
-                                SpecCard(title: "Power", value: "2.5kW", icon: "bolt")
+                                SpecCard(title: "Head", value: "AI Core", icon: "brain.head.profile")
+                                SpecCard(title: "Torso", value: "Power Unit", icon: "bolt")
+                                SpecCard(title: "Arms", value: "Servo Motors", icon: "gearshape")
+                                SpecCard(title: "Legs", value: "Actuators", icon: "figure.walk")
                             }
                         }
                         .padding(.horizontal, 20)
                         
-                        // 核心功能
+                        // 组装状态
                         VStack(spacing: 15) {
-                            Text("CORE CAPABILITIES")
+                            Text("ASSEMBLY STATUS")
                                 .font(.system(size: 20, weight: .bold, design: .monospaced))
                                 .foregroundColor(.white)
                                 .tracking(2)
                             
                             VStack(spacing: 10) {
-                                CapabilityRow(title: "Autonomous Navigation", description: "Advanced SLAM algorithms")
-                                CapabilityRow(title: "Object Manipulation", description: "Precision gripper control")
-                                CapabilityRow(title: "Human Interaction", description: "Natural language processing")
-                                CapabilityRow(title: "Learning & Adaptation", description: "Continuous skill improvement")
+                                AssemblyStatusRow(component: "Head Module", status: "Installed", color: .green)
+                                AssemblyStatusRow(component: "Torso Module", status: "Installed", color: .green)
+                                AssemblyStatusRow(component: "Arm Modules", status: "Installed", color: .green)
+                                AssemblyStatusRow(component: "Leg Modules", status: "Installed", color: .green)
+                                AssemblyStatusRow(component: "AI Processor", status: "Ready", color: .blue)
+                                AssemblyStatusRow(component: "Power System", status: "Ready", color: .blue)
                             }
                         }
                         .padding(.horizontal, 20)
@@ -203,11 +443,218 @@ struct UniversalRobotDetailView: View {
                     .padding(.vertical, 20)
                 }
             }
-            .navigationTitle("Universal Robot")
+            .navigationTitle("Modular Robot")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
             })
+        }
+    }
+}
+
+// 组装状态行
+struct AssemblyStatusRow: View {
+    let component: String
+    let status: String
+    let color: Color
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(component)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.white)
+                
+                Text(status)
+                    .font(.system(size: 12))
+                    .foregroundColor(color)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 16))
+                .foregroundColor(color)
+        }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+}
+
+// 机器人组装界面
+struct RobotAssemblyView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @State private var selectedCategory = 0
+    @State private var selectedComponent = 0
+    
+    let categories = ["Head", "Torso", "Arms", "Legs", "Sensors", "Power"]
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                CyberpunkBackground()
+                
+                VStack(spacing: 0) {
+                    // 3D预览区域
+                    VStack {
+                        Text("ASSEMBLY PREVIEW")
+                            .font(.system(size: 18, weight: .bold, design: .monospaced))
+                            .foregroundColor(.white)
+                            .tracking(2)
+                            .padding(.top, 20)
+                        
+                        ModularRobot3DView()
+                            .frame(height: 300)
+                            .padding(.horizontal, 20)
+                    }
+                    
+                    // 组装控制区域
+                    VStack(spacing: 20) {
+                        // 分类选择器
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) {
+                                ForEach(0..<categories.count, id: \.self) { index in
+                                    Button(action: {
+                                        selectedCategory = index
+                                        selectedComponent = 0
+                                    }) {
+                                        Text(categories[index])
+                                            .font(.system(size: 14, weight: .semibold))
+                                            .foregroundColor(selectedCategory == index ? .white : .white.opacity(0.6))
+                                            .padding(.horizontal, 20)
+                                            .padding(.vertical, 10)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .fill(selectedCategory == index ? 
+                                                          LinearGradient(colors: [Color.cyan, Color.blue], startPoint: .leading, endPoint: .trailing) :
+                                                          LinearGradient(colors: [Color.white.opacity(0.1), Color.white.opacity(0.1)], startPoint: .leading, endPoint: .trailing))
+                                            )
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 20)
+                                                    .stroke(selectedCategory == index ? Color.cyan.opacity(0.5) : Color.clear, lineWidth: 1)
+                                            )
+                                    }
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        
+                        // 组件列表
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                                ForEach(getComponents(for: selectedCategory), id: \.self) { component in
+                                    ComponentCard(component: component)
+                                }
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        .frame(maxHeight: 300)
+                    }
+                    .padding(.bottom, 20)
+                }
+            }
+            .navigationTitle("Robot Assembly")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: Button("Cancel") {
+                    presentationMode.wrappedValue.dismiss()
+                },
+                trailing: Button("Save") {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            )
+        }
+    }
+    
+    private func getComponents(for category: Int) -> [String] {
+        switch category {
+        case 0: // Head
+            return ["AI Core v1.0", "Vision System", "Audio Processor", "Neural Network", "Memory Module", "Communication Hub"]
+        case 1: // Torso
+            return ["Power Unit", "Main Controller", "Battery Pack", "Cooling System", "Data Bus", "Backup Power"]
+        case 2: // Arms
+            return ["Servo Motors", "Force Sensors", "Gripper System", "Joint Controllers", "Flexible Cables", "Armor Plating"]
+        case 3: // Legs
+            return ["Linear Actuators", "Balance Sensors", "Foot Pads", "Knee Joints", "Shock Absorbers", "Mobility System"]
+        case 4: // Sensors
+            return ["LIDAR Scanner", "Depth Camera", "IMU Sensor", "Touch Sensors", "Temperature Sensor", "Pressure Sensors"]
+        case 5: // Power
+            return ["Lithium Battery", "Solar Panel", "Wireless Charging", "Power Management", "Energy Monitor", "Backup Generator"]
+        default:
+            return []
+        }
+    }
+}
+
+// 组件卡片
+struct ComponentCard: View {
+    let component: String
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            // 组件图标
+            Image(systemName: getComponentIcon())
+                .font(.system(size: 30))
+                .foregroundColor(.cyan)
+                .frame(width: 60, height: 60)
+                .background(
+                    Circle()
+                        .fill(Color.cyan.opacity(0.2))
+                )
+            
+            // 组件名称
+            Text(component)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+            
+            // 安装按钮
+            Button(action: {
+                // 安装组件的逻辑
+            }) {
+                Text("INSTALL")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.green)
+                    )
+            }
+        }
+        .padding(.vertical, 15)
+        .padding(.horizontal, 10)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+    
+    private func getComponentIcon() -> String {
+        if component.contains("AI") || component.contains("Neural") {
+            return "brain.head.profile"
+        } else if component.contains("Vision") || component.contains("Camera") {
+            return "eye"
+        } else if component.contains("Power") || component.contains("Battery") {
+            return "bolt"
+        } else if component.contains("Motor") || component.contains("Actuator") {
+            return "gearshape"
+        } else if component.contains("Sensor") {
+            return "sensor.tag.radiowaves"
+        } else if component.contains("Memory") || component.contains("Data") {
+            return "memorychip"
+        } else {
+            return "cube"
         }
     }
 }
