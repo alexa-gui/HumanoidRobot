@@ -1528,8 +1528,8 @@ struct CyberpunkBackground: View {
                     }
                     
                     for y in stride(from: 0, through: height, by: gridSize) {
-                        path.move(to: CGPoint(x: 0, y: y))
-                        path.addLine(to: CGPoint(x: width, y: y))
+                        path.move(to: CGPoint(x: 0, y: y + 20))
+                        path.addLine(to: CGPoint(x: width, y: y + 20))
                     }
                 }
                 .stroke(Color.mint.opacity(0.1), lineWidth: 0.5)
