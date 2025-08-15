@@ -923,7 +923,7 @@ struct KnowledgeView: View {
                             .tracking(2)
                     }
                     .padding(.top, 120)
-                    .offset(y: -80)
+                    .offset(y: 0)
                     
                     // 知识分类
                     ScrollView {
@@ -1464,7 +1464,7 @@ struct RobotSelectionView: View {
                             .tracking(3)
                     }
                     .padding(.top, 120)
-                    .offset(y: -40)
+                    .offset(y: 0)
                     
                     Spacer()
                     
@@ -1481,6 +1481,7 @@ struct RobotSelectionView: View {
                         }
                     }
                     .padding(.horizontal, 20)
+                    .padding(.top, 20)
                     
                     Spacer()
                     
@@ -1713,6 +1714,7 @@ struct RobotDetailView: View {
     let robot: RobotType
     @State private var selectedPart: RobotPart?
     @State private var showingDetail = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ZStack {
@@ -1723,7 +1725,15 @@ struct RobotDetailView: View {
                 // 顶部导航栏
                 HStack {
                     // 返回按钮
-                    NavigationLink("← Back", destination: RobotSelectionView())
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 16, weight: .medium))
+                            Text("Back")
+                                .font(.system(size: 16, weight: .medium))
+                        }
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
@@ -1735,6 +1745,7 @@ struct RobotDetailView: View {
                                         .stroke(Color.white.opacity(0.3), lineWidth: 1)
                                 )
                         )
+                    }
                     
                     Spacer()
                     
