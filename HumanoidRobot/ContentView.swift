@@ -57,7 +57,7 @@ struct HomeView: View {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
-                            .font(.system(size: 42, weight: .black, design: .monospaced))
+                            .font(.system(size: 38, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Color.mint, Color.cyan, Color.blue],
@@ -907,7 +907,7 @@ struct KnowledgeView: View {
                         // 标题
                         VStack(spacing: 10) {
                             Text("KNOWLEDGE")
-                                .font(.system(size: 42, weight: .black, design: .monospaced))
+                                .font(.system(size: 38, weight: .black, design: .monospaced))
                                 .foregroundStyle(
                                     LinearGradient(
                                         colors: [Color.mint, Color.cyan, Color.blue],
@@ -1442,11 +1442,11 @@ struct RobotSelectionView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 30) {
+                VStack(spacing: 25) {
                     // 标题
                     VStack(spacing: 10) {
                         Text("ROBOT")
-                            .font(.system(size: 42, weight: .black, design: .monospaced))
+                            .font(.system(size: 38, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Color.mint, Color.cyan, Color.blue],
