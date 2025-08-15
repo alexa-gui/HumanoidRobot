@@ -1464,7 +1464,7 @@ struct RobotSelectionView: View {
                             .tracking(3)
                     }
                     .padding(.top, 140)
-                    .offset(y: 0)
+                    .offset(y: -40)
                     
                     Spacer()
                     
