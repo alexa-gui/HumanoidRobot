@@ -8,6 +8,33 @@
 import SwiftUI
 import SceneKit
 
+// MARK: - 统一标题组件
+struct MainTitle: View {
+    let title: String
+    let subtitle: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Text(title)
+                .font(.system(size: 38, weight: .black, design: .monospaced))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Color.mint, Color.cyan, Color.blue],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+            
+            Text(subtitle)
+                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                .foregroundColor(.white.opacity(0.8))
+                .tracking(3)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top, 40) // 相对安全区域
+    }
+}
+
 struct ContentView: View {
     @State private var selectedTab = 1 // 默认选中Home
     
@@ -54,24 +81,8 @@ struct HomeView: View {
                 CyberpunkBackground()
                 
                 VStack(spacing: 25) {
-                    // 蓝色大标题
-                    VStack(spacing: 8) {
-                        Text("WELCOME")
-                            .font(.system(size: 38, weight: .black, design: .monospaced))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [Color.mint, Color.cyan, Color.blue],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                        
-                        Text("MODULAR ASSEMBLY")
-                            .font(.system(size: 16, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
-                            .tracking(3)
-                    }
-                    .padding(.top, 140)
+                    // 统一标题组件
+                    MainTitle(title: "WELCOME", subtitle: "MODULAR ASSEMBLY")
                     
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
@@ -903,24 +914,8 @@ struct KnowledgeView: View {
                 CyberpunkBackground()
                 
                 VStack(spacing: 25) {
-                    // 标题
-                    VStack(spacing: 10) {
-                        Text("KNOWLEDGE")
-                            .font(.system(size: 38, weight: .black, design: .monospaced))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [Color.mint, Color.cyan, Color.blue],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                        
-                        Text("EMBODIED AI GUIDE")
-                            .font(.system(size: 16, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
-                            .tracking(2)
-                    }
-                    .padding(.top, 140)
+                    // 统一标题组件
+                    MainTitle(title: "KNOWLEDGE", subtitle: "EMBODIED AI GUIDE")
                     
                     // 知识分类
                     ScrollView {
@@ -1443,24 +1438,8 @@ struct RobotSelectionView: View {
                 CyberpunkBackground()
                 
                 VStack(spacing: 25) {
-                    // 标题
-                    VStack(spacing: 10) {
-                        Text("ROBOT")
-                            .font(.system(size: 38, weight: .black, design: .monospaced))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [Color.mint, Color.cyan, Color.blue],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                        
-                        Text("COLLECTION")
-                            .font(.system(size: 16, weight: .medium, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.8))
-                            .tracking(3)
-                    }
-                    .padding(.top, 140)
+                    // 统一标题组件
+                    MainTitle(title: "ROBOT", subtitle: "COLLECTION")
                     
                     Spacer()
                     
