@@ -72,7 +72,7 @@ struct HomeView: View {
                             .tracking(3)
                     }
                     .padding(.top, 120)
-                    .offset(y: 20)
+                    .offset(y: 0)
                     
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
@@ -922,7 +922,7 @@ struct KnowledgeView: View {
                             .tracking(2)
                     }
                     .padding(.top, 120)
-                    .offset(y: 40)
+                    .offset(y: 0)
                     
                     // 知识分类
                     ScrollView {
@@ -965,7 +965,7 @@ struct KnowledgeView: View {
                             KnowledgeCategoryCard(
                                 title: "Datasets & Benchmarks",
                                 subtitle: "训练数据、评估标准、基准测试",
-                                icon: "chart.bar.fill",
+                                icon: "list.bullet.clipboard.fill",
                                 color: .cyan
                             )
                             
@@ -1463,7 +1463,7 @@ struct RobotSelectionView: View {
                             .tracking(3)
                     }
                     .padding(.top, 120)
-                    .offset(y: -20)
+                    .offset(y: 0)
                     
                     Spacer()
                     
