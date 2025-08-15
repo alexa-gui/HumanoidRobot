@@ -53,7 +53,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 25) {
+                VStack(spacing: 15) {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
@@ -71,13 +71,13 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 100)
+                    .padding(.top, 80)
                     
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
                         // 3D机器人视图
                         ModularRobot3DView()
-                            .frame(height: 350)
+                            .frame(height: 400)
                             .onTapGesture {
                                 showingRobotDetail = true
                             }
