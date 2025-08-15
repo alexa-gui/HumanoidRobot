@@ -71,7 +71,7 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 140)
+                    .padding(.top, 180)
                     .offset(y: 0)
                     
                     // 模块化机器人3D模型
@@ -922,7 +922,7 @@ struct KnowledgeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(2)
                     }
-                    .padding(.top, 140)
+                    .padding(.top, 180)
                     .offset(y: -80)
                     
                     // 知识分类
@@ -1463,7 +1463,7 @@ struct RobotSelectionView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 140)
+                    .padding(.top, 180)
                     .offset(y: -40)
                     
                     Spacer()
@@ -1528,8 +1528,8 @@ struct CyberpunkBackground: View {
                     }
                     
                     for y in stride(from: 0, through: height, by: gridSize) {
-                        path.move(to: CGPoint(x: 0, y: y + 20))
-                        path.addLine(to: CGPoint(x: width, y: y + 20))
+                        path.move(to: CGPoint(x: 0, y: y + 60))
+                        path.addLine(to: CGPoint(x: width, y: y + 60))
                     }
                 }
                 .stroke(Color.mint.opacity(0.1), lineWidth: 0.5)
