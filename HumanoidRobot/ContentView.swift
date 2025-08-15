@@ -12,36 +12,33 @@ struct ContentView: View {
     @State private var selectedTab = 1 // 默认选中Home
     
     var body: some View {
-        ZStack {
-            // 主内容区域
-            TabView(selection: $selectedTab) {
-                // Tab 1: Robot Models - 各家公司机器人模型
-                RobotSelectionView()
-                    .tabItem {
-                        Image(systemName: "cube.box")
-                        Text("Models")
-                    }
-                    .tag(0)
-                
-                // Tab 2: Home - 模块化组装 (中间)
-                HomeView()
-                    .tabItem {
-                        Image(systemName: "house.fill")
-                        Text("Home")
-                    }
-                    .tag(1)
-                
-                // Tab 3: Knowledge - 硬核科技知识
-                KnowledgeView()
-                    .tabItem {
-                        Image(systemName: "book.fill")
-                        Text("Knowledge")
-                    }
-                    .tag(2)
-            }
-            .accentColor(.cyan)
-            .preferredColorScheme(.dark)
+        TabView(selection: $selectedTab) {
+            // Tab 1: Robot Models - 各家公司机器人模型
+            RobotSelectionView()
+                .tabItem {
+                    Image(systemName: "cube.box")
+                    Text("Models")
+                }
+                .tag(0)
+            
+            // Tab 2: Home - 模块化组装 (中间)
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+                .tag(1)
+            
+            // Tab 3: Knowledge - 硬核科技知识
+            KnowledgeView()
+                .tabItem {
+                    Image(systemName: "book.fill")
+                    Text("Knowledge")
+                }
+                .tag(2)
         }
+        .accentColor(.cyan)
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -57,10 +54,10 @@ struct HomeView: View {
                 CyberpunkBackground()
                 
                 VStack(spacing: 30) {
-                    // 标题
+                    // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
-                            .font(.system(size: 48, weight: .black, design: .monospaced))
+                            .font(.system(size: 56, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Color.mint, Color.cyan, Color.blue],
@@ -70,11 +67,11 @@ struct HomeView: View {
                             )
                         
                         Text("MODULAR ASSEMBLY")
-                            .font(.system(size: 18, weight: .medium, design: .monospaced))
+                            .font(.system(size: 20, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 50)
+                    .padding(.top, 60)
                     
                     Spacer()
                     
@@ -87,7 +84,7 @@ struct HomeView: View {
                         
                         // 3D机器人视图
                         ModularRobot3DView()
-                            .frame(height: 400)
+                            .frame(height: 350)
                             .onTapGesture {
                                 showingRobotDetail = true
                             }
@@ -130,13 +127,9 @@ struct HomeView: View {
                         )
                     }
                     
-                    // 模块统计
-                    HStack(spacing: 30) {
-                        StatCard(title: "Components", value: "12", icon: "gearshape")
-                        StatCard(title: "Categories", value: "6", icon: "folder.fill")
-                        StatCard(title: "Custom", value: "∞", icon: "infinity")
-                    }
-                    .padding(.bottom, 120) // 进一步增加底部间距避免Tab重叠
+                    // 底部间距，确保不与Tab重叠
+                    Spacer()
+                        .frame(height: 100)
                 }
             }
             .navigationBarHidden(true)
@@ -687,7 +680,7 @@ struct RobotAssemblyView: View {
                 
                 VStack(spacing: 0) {
                     // 3D预览区域
-                    VStack {
+        VStack {
                         Text("ASSEMBLY PREVIEW")
                             .font(.system(size: 18, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
