@@ -902,28 +902,28 @@ struct KnowledgeView: View {
             ZStack {
                 CyberpunkBackground()
                 
-                ScrollView {
-                    VStack(spacing: 25) {
-                        // 标题
-                        VStack(spacing: 10) {
-                            Text("KNOWLEDGE")
-                                .font(.system(size: 38, weight: .black, design: .monospaced))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [Color.mint, Color.cyan, Color.blue],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
+                VStack(spacing: 25) {
+                    // 标题
+                    VStack(spacing: 10) {
+                        Text("KNOWLEDGE")
+                            .font(.system(size: 38, weight: .black, design: .monospaced))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [Color.mint, Color.cyan, Color.blue],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
                                 )
-                            
-                            Text("EMBODIED AI GUIDE")
-                                .font(.system(size: 16, weight: .medium, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.8))
-                                .tracking(2)
-                        }
-                        .padding(.top, 100)
+                            )
                         
-                        // 知识分类
+                        Text("EMBODIED AI GUIDE")
+                            .font(.system(size: 16, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                            .tracking(2)
+                    }
+                    .padding(.top, 100)
+                    
+                    // 知识分类
+                    ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible())], spacing: 15) {
                             KnowledgeCategoryCard(
                                 title: "Hardware Systems",
