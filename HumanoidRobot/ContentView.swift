@@ -73,15 +73,8 @@ struct HomeView: View {
                     }
                     .padding(.top, 100)
                     
-                    Spacer()
-                    
                     // 模块化机器人3D模型
-                    VStack(spacing: 15) {
-                        Text("CUSTOM ROBOT")
-                            .font(.system(size: 20, weight: .bold, design: .monospaced))
-                            .foregroundColor(.white)
-                            .tracking(2)
-                        
+                    VStack(spacing: 10) {
                         // 3D机器人视图
                         ModularRobot3DView()
                             .frame(height: 350)
