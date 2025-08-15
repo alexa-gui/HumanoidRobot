@@ -31,7 +31,7 @@ struct MainTitle: View {
                 .tracking(3)
         }
         .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.top, 40) // 相对安全区域
+        .padding(.top, 80) // 固定高度，确保对齐
     }
 }
 
@@ -958,7 +958,7 @@ struct KnowledgeView: View {
                             KnowledgeCategoryCard(
                                 title: "Datasets & Benchmarks",
                                 subtitle: "训练数据、评估标准、基准测试",
-                                icon: "list.bullet.clipboard.fill",
+                                icon: "chart.bar.fill",
                                 color: .cyan
                             )
                             
@@ -999,11 +999,12 @@ struct KnowledgeCategoryCard: View {
                 // 图标
                 Image(systemName: icon)
                     .font(.system(size: 24))
+                    .symbolRenderingMode(.hierarchical)
                     .foregroundColor(color)
                     .frame(width: 50, height: 50)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(color.opacity(0.2))
+                            .fill(Color.black.opacity(0.3))
                     )
                 
                 // 内容
