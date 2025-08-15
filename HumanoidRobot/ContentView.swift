@@ -57,7 +57,7 @@ struct HomeView: View {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
-                            .font(.system(size: 56, weight: .black, design: .monospaced))
+                            .font(.system(size: 42, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Color.mint, Color.cyan, Color.blue],
@@ -67,11 +67,11 @@ struct HomeView: View {
                             )
                         
                         Text("MODULAR ASSEMBLY")
-                            .font(.system(size: 20, weight: .medium, design: .monospaced))
+                            .font(.system(size: 16, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 60)
+                    .padding(.top, 100)
                     
                     Spacer()
                     
@@ -916,7 +916,7 @@ struct KnowledgeView: View {
                         // 标题
                         VStack(spacing: 10) {
                             Text("KNOWLEDGE")
-                                .font(.system(size: 36, weight: .black, design: .monospaced))
+                                .font(.system(size: 42, weight: .black, design: .monospaced))
                                 .foregroundStyle(
                                     LinearGradient(
                                         colors: [Color.mint, Color.cyan, Color.blue],
@@ -930,7 +930,7 @@ struct KnowledgeView: View {
                                 .foregroundColor(.white.opacity(0.8))
                                 .tracking(2)
                         }
-                        .padding(.top, 20)
+                        .padding(.top, 100)
                         
                         // 知识分类
                         LazyVGrid(columns: [GridItem(.flexible())], spacing: 15) {
@@ -1455,7 +1455,7 @@ struct RobotSelectionView: View {
                     // 标题
                     VStack(spacing: 10) {
                         Text("ROBOT")
-                            .font(.system(size: 48, weight: .black, design: .monospaced))
+                            .font(.system(size: 42, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
                                     colors: [Color.mint, Color.cyan, Color.blue],
@@ -1465,11 +1465,11 @@ struct RobotSelectionView: View {
                             )
                         
                         Text("COLLECTION")
-                            .font(.system(size: 18, weight: .medium, design: .monospaced))
+                            .font(.system(size: 16, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 50)
+                    .padding(.top, 100)
                     
                     Spacer()
                     
