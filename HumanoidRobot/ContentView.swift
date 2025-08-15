@@ -12,33 +12,36 @@ struct ContentView: View {
     @State private var selectedTab = 1 // 默认选中Home
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            // Tab 1: Robot Models - 各家公司机器人模型
-            RobotSelectionView()
-                .tabItem {
-                    Image(systemName: "cube.box")
-                    Text("Models")
-                }
-                .tag(0)
-            
-            // Tab 2: Home - 模块化组装 (中间)
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-                .tag(1)
-            
-            // Tab 3: Knowledge - 硬核科技知识
-            KnowledgeView()
-                .tabItem {
-                    Image(systemName: "book.fill")
-                    Text("Knowledge")
-                }
-                .tag(2)
+        ZStack {
+            // 主内容区域
+            TabView(selection: $selectedTab) {
+                // Tab 1: Robot Models - 各家公司机器人模型
+                RobotSelectionView()
+                    .tabItem {
+                        Image(systemName: "cube.box")
+                        Text("Models")
+                    }
+                    .tag(0)
+                
+                // Tab 2: Home - 模块化组装 (中间)
+                HomeView()
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+                    .tag(1)
+                
+                // Tab 3: Knowledge - 硬核科技知识
+                KnowledgeView()
+                    .tabItem {
+                        Image(systemName: "book.fill")
+                        Text("Knowledge")
+                    }
+                    .tag(2)
+            }
+            .accentColor(.cyan)
+            .preferredColorScheme(.dark)
         }
-        .accentColor(.cyan)
-        .preferredColorScheme(.dark)
     }
 }
 
@@ -56,7 +59,7 @@ struct HomeView: View {
                 VStack(spacing: 30) {
                     // 标题
                     VStack(spacing: 10) {
-                        Text("MODULAR")
+                        Text("WELCOME")
                             .font(.system(size: 48, weight: .black, design: .monospaced))
                             .foregroundStyle(
                                 LinearGradient(
@@ -66,7 +69,7 @@ struct HomeView: View {
                                 )
                             )
                         
-                        Text("ASSEMBLY")
+                        Text("MODULAR ASSEMBLY")
                             .font(.system(size: 18, weight: .medium, design: .monospaced))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
@@ -133,7 +136,7 @@ struct HomeView: View {
                         StatCard(title: "Categories", value: "6", icon: "folder.fill")
                         StatCard(title: "Custom", value: "∞", icon: "infinity")
                     }
-                    .padding(.bottom, 100) // 增加底部间距避免Tab重叠
+                    .padding(.bottom, 120) // 进一步增加底部间距避免Tab重叠
                 }
             }
             .navigationBarHidden(true)
