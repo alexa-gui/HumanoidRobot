@@ -53,7 +53,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 15) {
+                VStack(spacing: 10) {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
@@ -907,7 +907,7 @@ struct KnowledgeView: View {
                         // 标题
                         VStack(spacing: 10) {
                             Text("KNOWLEDGE")
-                                .font(.system(size: 42, weight: .black, design: .monospaced))
+                                .font(.system(size: 36, weight: .black, design: .monospaced))
                                 .foregroundStyle(
                                     LinearGradient(
                                         colors: [Color.mint, Color.cyan, Color.blue],
