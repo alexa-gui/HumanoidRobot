@@ -9,15 +9,814 @@ import SwiftUI
 import SceneKit
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+    
     var body: some View {
-        NavigationView {
+        TabView(selection: $selectedTab) {
+            // Tab 1: Home - 通用机器人模型
+            HomeView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+                .tag(0)
+            
+            // Tab 2: Robots - 各家公司机器人模型
             RobotSelectionView()
+                .tabItem {
+                    Image(systemName: "robot")
+                    Text("Robots")
+                }
+                .tag(1)
+            
+            // Tab 3: Knowledge - 硬核科技知识
+            KnowledgeView()
+                .tabItem {
+                    Image(systemName: "brain.head.profile")
+                    Text("Knowledge")
+                }
+                .tag(2)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .accentColor(.cyan)
+        .preferredColorScheme(.dark)
     }
 }
 
-// 机器人选择主页
+// MARK: - Home Tab - 通用机器人模型
+struct HomeView: View {
+    @State private var showingRobotDetail = false
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                // 赛博朋克背景
+                CyberpunkBackground()
+                
+                VStack(spacing: 30) {
+                    // 标题
+                    VStack(spacing: 10) {
+                        Text("HUMANOID")
+                            .font(.system(size: 48, weight: .black, design: .monospaced))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    colors: [Color.mint, Color.cyan, Color.blue],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                        
+                        Text("AI PLATFORM")
+                            .font(.system(size: 18, weight: .medium, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.8))
+                            .tracking(3)
+                    }
+                    .padding(.top, 50)
+                    
+                    Spacer()
+                    
+                    // 通用机器人3D模型
+                    VStack(spacing: 20) {
+                        Text("UNIVERSAL ROBOT")
+                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+                            .foregroundColor(.white)
+                            .tracking(2)
+                        
+                        // 3D机器人视图
+                        Robot3DView(
+                            robot: .teslaOptimus,
+                            selectedPart: .constant(nil),
+                            showingDetail: .constant(false)
+                        )
+                        .frame(height: 400)
+                        .onTapGesture {
+                            showingRobotDetail = true
+                        }
+                        
+                        Text("Tap to explore")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white.opacity(0.6))
+                    }
+                    .padding(.horizontal, 20)
+                    
+                    Spacer()
+                    
+                    // 快速统计
+                    HStack(spacing: 30) {
+                        StatCard(title: "Models", value: "4", icon: "cube.fill")
+                        StatCard(title: "Categories", value: "8", icon: "folder.fill")
+                        StatCard(title: "Papers", value: "50+", icon: "doc.text.fill")
+                    }
+                    .padding(.bottom, 30)
+                }
+            }
+            .navigationBarHidden(true)
+            .sheet(isPresented: $showingRobotDetail) {
+                UniversalRobotDetailView()
+            }
+        }
+    }
+}
+
+// 统计卡片
+struct StatCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundColor(.cyan)
+            
+            Text(value)
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.white)
+            
+            Text(title)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(.white.opacity(0.7))
+        }
+        .frame(width: 80, height: 80)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}
+
+// 通用机器人详情页
+struct UniversalRobotDetailView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                CyberpunkBackground()
+                
+                ScrollView {
+                    VStack(spacing: 30) {
+                        // 3D模型
+                        Robot3DView(
+                            robot: .teslaOptimus,
+                            selectedPart: .constant(nil),
+                            showingDetail: .constant(false)
+                        )
+                        .frame(height: 300)
+                        
+                        // 技术规格
+                        VStack(spacing: 20) {
+                            Text("TECHNICAL SPECIFICATIONS")
+                                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                                .foregroundColor(.white)
+                                .tracking(2)
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                                SpecCard(title: "Height", value: "1.7m", icon: "ruler")
+                                SpecCard(title: "Weight", value: "60kg", icon: "scalemass")
+                                SpecCard(title: "DOF", value: "32", icon: "gearshape")
+                                SpecCard(title: "Power", value: "2.5kW", icon: "bolt")
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        
+                        // 核心功能
+                        VStack(spacing: 15) {
+                            Text("CORE CAPABILITIES")
+                                .font(.system(size: 20, weight: .bold, design: .monospaced))
+                                .foregroundColor(.white)
+                                .tracking(2)
+                            
+                            VStack(spacing: 10) {
+                                CapabilityRow(title: "Autonomous Navigation", description: "Advanced SLAM algorithms")
+                                CapabilityRow(title: "Object Manipulation", description: "Precision gripper control")
+                                CapabilityRow(title: "Human Interaction", description: "Natural language processing")
+                                CapabilityRow(title: "Learning & Adaptation", description: "Continuous skill improvement")
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                    .padding(.vertical, 20)
+                }
+            }
+            .navigationTitle("Universal Robot")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(trailing: Button("Done") {
+                presentationMode.wrappedValue.dismiss()
+            })
+        }
+    }
+}
+
+// 规格卡片
+struct SpecCard: View {
+    let title: String
+    let value: String
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.system(size: 20))
+                .foregroundColor(.cyan)
+            
+            Text(value)
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.white)
+            
+            Text(title)
+                .font(.system(size: 10, weight: .medium))
+                .foregroundColor(.white.opacity(0.7))
+        }
+        .frame(height: 80)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}
+
+// 功能行
+struct CapabilityRow: View {
+    let title: String
+    let description: String
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(.white)
+                
+                Text(description)
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.7))
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .font(.system(size: 12))
+                .foregroundColor(.cyan)
+        }
+        .padding(.horizontal, 15)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white.opacity(0.05))
+        )
+    }
+}
+
+// MARK: - Knowledge Tab - 硬核科技知识
+struct KnowledgeView: View {
+    var body: some View {
+        NavigationView {
+            ZStack {
+                CyberpunkBackground()
+                
+                ScrollView {
+                    VStack(spacing: 25) {
+                        // 标题
+                        VStack(spacing: 10) {
+                            Text("KNOWLEDGE")
+                                .font(.system(size: 36, weight: .black, design: .monospaced))
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: [Color.mint, Color.cyan, Color.blue],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                            
+                            Text("EMBODIED AI GUIDE")
+                                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.8))
+                                .tracking(2)
+                        }
+                        .padding(.top, 20)
+                        
+                        // 知识分类
+                        LazyVGrid(columns: [GridItem(.flexible())], spacing: 15) {
+                            KnowledgeCategoryCard(
+                                title: "Hardware Systems",
+                                subtitle: "机械结构、传感器、执行器",
+                                icon: "gearshape.2.fill",
+                                color: .blue
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Software & AI",
+                                subtitle: "算法、机器学习、控制系统",
+                                icon: "brain.head.profile",
+                                color: .purple
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Control & Planning",
+                                subtitle: "运动控制、路径规划、任务执行",
+                                icon: "target",
+                                color: .green
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Perception & Sensing",
+                                subtitle: "视觉、触觉、多模态感知",
+                                icon: "eye.fill",
+                                color: .orange
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Learning & Adaptation",
+                                subtitle: "强化学习、模仿学习、迁移学习",
+                                icon: "graduationcap.fill",
+                                color: .pink
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Datasets & Benchmarks",
+                                subtitle: "训练数据、评估标准、基准测试",
+                                icon: "database.fill",
+                                color: .cyan
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Research Papers",
+                                subtitle: "最新论文、技术趋势、前沿研究",
+                                icon: "doc.text.fill",
+                                color: .red
+                            )
+                            
+                            KnowledgeCategoryCard(
+                                title: "Development Tools",
+                                subtitle: "仿真环境、开发框架、调试工具",
+                                icon: "hammer.fill",
+                                color: .yellow
+                            )
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                    .padding(.bottom, 30)
+                }
+            }
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+// 知识分类卡片
+struct KnowledgeCategoryCard: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        NavigationLink(destination: KnowledgeDetailView(category: title)) {
+            HStack(spacing: 15) {
+                // 图标
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                    .foregroundColor(color)
+                    .frame(width: 50, height: 50)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(color.opacity(0.2))
+                    )
+                
+                // 内容
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white)
+                    
+                    Text(subtitle)
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.7))
+                        .lineLimit(2)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14))
+                    .foregroundColor(.white.opacity(0.5))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 15)
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(Color.white.opacity(0.1))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(color.opacity(0.3), lineWidth: 1)
+                    )
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+
+// 知识详情页
+struct KnowledgeDetailView: View {
+    let category: String
+    
+    var body: some View {
+        ZStack {
+            CyberpunkBackground()
+            
+            ScrollView {
+                VStack(spacing: 25) {
+                    // 标题
+                    Text(category.uppercased())
+                        .font(.system(size: 28, weight: .black, design: .monospaced))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Color.mint, Color.cyan, Color.blue],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .padding(.top, 20)
+                    
+                    // 根据分类显示不同内容
+                    switch category {
+                    case "Hardware Systems":
+                        HardwareSystemsContent()
+                    case "Software & AI":
+                        SoftwareAIContent()
+                    case "Control & Planning":
+                        ControlPlanningContent()
+                    case "Perception & Sensing":
+                        PerceptionSensingContent()
+                    case "Learning & Adaptation":
+                        LearningAdaptationContent()
+                    case "Datasets & Benchmarks":
+                        DatasetsBenchmarksContent()
+                    case "Research Papers":
+                        ResearchPapersContent()
+                    case "Development Tools":
+                        DevelopmentToolsContent()
+                    default:
+                        Text("Content coming soon...")
+                            .foregroundColor(.white)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 30)
+            }
+        }
+        .navigationTitle(category)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - 知识内容组件
+struct HardwareSystemsContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "机械结构",
+                items: [
+                    "关节设计 - 高精度伺服电机",
+                    "连杆系统 - 轻量化碳纤维材料",
+                    "平衡机构 - 动态重心调节",
+                    "末端执行器 - 多功能手部设计"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "传感器系统",
+                items: [
+                    "IMU - 惯性测量单元",
+                    "力传感器 - 触觉反馈",
+                    "视觉传感器 - 深度相机",
+                    "编码器 - 位置反馈"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "执行器技术",
+                items: [
+                    "伺服电机 - 高扭矩密度",
+                    "液压系统 - 大功率输出",
+                    "气动系统 - 轻量化设计",
+                    "直线执行器 - 精确控制"
+                ]
+            )
+        }
+    }
+}
+
+struct SoftwareAIContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "人工智能算法",
+                items: [
+                    "深度学习 - 神经网络架构",
+                    "强化学习 - 策略优化",
+                    "计算机视觉 - 目标识别",
+                    "自然语言处理 - 人机交互"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "控制系统",
+                items: [
+                    "PID控制 - 基础控制算法",
+                    "模型预测控制 - 高级控制",
+                    "自适应控制 - 环境适应",
+                    "鲁棒控制 - 抗干扰能力"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "软件架构",
+                items: [
+                    "ROS - 机器人操作系统",
+                    "实时系统 - 低延迟响应",
+                    "分布式计算 - 多核并行",
+                    "云端集成 - 远程控制"
+                ]
+            )
+        }
+    }
+}
+
+struct ControlPlanningContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "运动控制",
+                items: [
+                    "轨迹规划 - 平滑运动",
+                    "逆运动学 - 位置控制",
+                    "动力学建模 - 力控制",
+                    "协调控制 - 多关节同步"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "路径规划",
+                items: [
+                    "A*算法 - 最优路径",
+                    "RRT算法 - 随机采样",
+                    "PRM算法 - 概率路线图",
+                    "动态规划 - 实时调整"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "任务执行",
+                items: [
+                    "任务分解 - 层次化执行",
+                    "状态机 - 行为控制",
+                    "错误恢复 - 异常处理",
+                    "多任务调度 - 并行执行"
+                ]
+            )
+        }
+    }
+}
+
+struct PerceptionSensingContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "视觉感知",
+                items: [
+                    "目标检测 - YOLO/SSD算法",
+                    "语义分割 - 像素级识别",
+                    "深度估计 - 3D重建",
+                    "姿态估计 - 6DOF定位"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "触觉感知",
+                items: [
+                    "力反馈 - 接触力测量",
+                    "纹理识别 - 表面特征",
+                    "形状感知 - 物体几何",
+                    "温度感知 - 热传导"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "多模态融合",
+                items: [
+                    "传感器融合 - 卡尔曼滤波",
+                    "跨模态学习 - 信息互补",
+                    "注意力机制 - 重点关注",
+                    "时序建模 - 动态感知"
+                ]
+            )
+        }
+    }
+}
+
+struct LearningAdaptationContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "强化学习",
+                items: [
+                    "Q-Learning - 价值函数",
+                    "Policy Gradient - 策略优化",
+                    "Actor-Critic - 混合方法",
+                    "Multi-Agent - 协作学习"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "模仿学习",
+                items: [
+                    "行为克隆 - 直接模仿",
+                    "逆强化学习 - 奖励推断",
+                    "生成对抗模仿 - GAN方法",
+                    "多模态模仿 - 跨域学习"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "迁移学习",
+                items: [
+                    "域适应 - 环境迁移",
+                    "技能迁移 - 任务迁移",
+                    "元学习 - 快速适应",
+                    "持续学习 - 增量更新"
+                ]
+            )
+        }
+    }
+}
+
+struct DatasetsBenchmarksContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "训练数据集",
+                items: [
+                    "RoboMIND - 10.7万条轨迹",
+                    "AgiBot World - 100万条数据",
+                    "DROID - 7.6万条示范",
+                    "BridgeData V2 - 6万条轨迹"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "评估基准",
+                items: [
+                    "成功率 - 任务完成率",
+                    "效率指标 - 时间成本",
+                    "鲁棒性 - 环境适应",
+                    "泛化能力 - 跨域测试"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "竞赛平台",
+                items: [
+                    "RoboCup - 机器人足球",
+                    "DARPA Challenge - 救援任务",
+                    "Amazon Picking - 拣选挑战",
+                    "RLBench - 基准测试"
+                ]
+            )
+        }
+    }
+}
+
+struct ResearchPapersContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "最新论文",
+                items: [
+                    "ICRA 2025 - 机器人自动化",
+                    "CoRL 2024 - 强化学习",
+                    "NeurIPS 2024 - 深度学习",
+                    "Science Robotics - 前沿技术"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "技术趋势",
+                items: [
+                    "大语言模型 - 机器人控制",
+                    "多模态学习 - 跨域理解",
+                    "自监督学习 - 无标注数据",
+                    "神经符号 - 可解释AI"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "前沿研究",
+                items: [
+                    "具身智能 - 物理交互",
+                    "社会机器人 - 人机协作",
+                    "软体机器人 - 柔性设计",
+                    "群体机器人 - 分布式控制"
+                ]
+            )
+        }
+    }
+}
+
+struct DevelopmentToolsContent: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            KnowledgeSection(
+                title: "仿真环境",
+                items: [
+                    "MuJoCo - 物理仿真",
+                    "Gazebo - ROS集成",
+                    "PyBullet - 开源仿真",
+                    "Isaac Sim - NVIDIA平台"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "开发框架",
+                items: [
+                    "ROS/ROS2 - 机器人中间件",
+                    "MoveIt - 运动规划",
+                    "OpenAI Gym - 强化学习",
+                    "Stable Baselines - RL算法"
+                ]
+            )
+            
+            KnowledgeSection(
+                title: "调试工具",
+                items: [
+                    "RViz - 3D可视化",
+                    "rqt - 图形化工具",
+                    "PlotJuggler - 数据可视化",
+                    "GDB - 程序调试"
+                ]
+            )
+        }
+    }
+}
+
+// 知识章节组件
+struct KnowledgeSection: View {
+    let title: String
+    let items: [String]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 15) {
+            Text(title)
+                .font(.system(size: 18, weight: .bold, design: .monospaced))
+                .foregroundColor(.cyan)
+                .tracking(1)
+            
+            VStack(spacing: 8) {
+                ForEach(items, id: \.self) { item in
+                    HStack {
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 6))
+                            .foregroundColor(.cyan)
+                        
+                        Text(item)
+                            .font(.system(size: 14))
+                            .foregroundColor(.white)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.white.opacity(0.05))
+                    )
+                }
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 15)
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color.white.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(Color.cyan.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+}
+
+// 机器人选择主页 (Robots Tab)
 struct RobotSelectionView: View {
     var body: some View {
         ZStack {
@@ -27,7 +826,7 @@ struct RobotSelectionView: View {
             VStack(spacing: 30) {
                 // 标题
                 VStack(spacing: 10) {
-                    Text("HUMANOID")
+                    Text("ROBOT")
                         .font(.system(size: 48, weight: .black, design: .monospaced))
                         .foregroundStyle(
                             LinearGradient(
@@ -37,7 +836,7 @@ struct RobotSelectionView: View {
                             )
                         )
                     
-                    Text("ROBOT COLLECTION")
+                    Text("COLLECTION")
                         .font(.system(size: 18, weight: .medium, design: .monospaced))
                         .foregroundColor(.white.opacity(0.8))
                         .tracking(3)
