@@ -87,7 +87,7 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.6))
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, -20)
+                    .padding(.top, -40)
                     
                     // 组装按钮
                     Button(action: {
