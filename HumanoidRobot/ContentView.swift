@@ -53,7 +53,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 15) {
+                VStack(spacing: 25) {
                     // 蓝色大标题
                     VStack(spacing: 8) {
                         Text("WELCOME")
