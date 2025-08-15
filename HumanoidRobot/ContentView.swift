@@ -923,7 +923,7 @@ struct KnowledgeView: View {
                             .tracking(2)
                     }
                     .padding(.top, 140)
-                    .offset(y: 0)
+                    .offset(y: -80)
                     
                     // 知识分类
                     ScrollView {
@@ -1464,7 +1464,7 @@ struct RobotSelectionView: View {
                             .tracking(3)
                     }
                     .padding(.top, 140)
-                    .offset(y: 0)
+                    .offset(y: -40)
                     
                     Spacer()
                     
