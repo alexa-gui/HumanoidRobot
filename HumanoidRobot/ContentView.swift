@@ -53,7 +53,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 30) {
+                VStack(spacing: 20) {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
@@ -76,9 +76,9 @@ struct HomeView: View {
                     Spacer()
                     
                     // 模块化机器人3D模型
-                    VStack(spacing: 20) {
+                    VStack(spacing: 15) {
                         Text("CUSTOM ROBOT")
-                            .font(.system(size: 24, weight: .bold, design: .monospaced))
+                            .font(.system(size: 20, weight: .bold, design: .monospaced))
                             .foregroundColor(.white)
                             .tracking(2)
                         
