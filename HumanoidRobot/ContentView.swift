@@ -71,7 +71,7 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 100)
+                    .padding(.top, 140)
                     
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
