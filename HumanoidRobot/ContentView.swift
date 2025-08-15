@@ -53,7 +53,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 20) {
+                VStack(spacing: 30) {
                     // 蓝色大标题
                     VStack(spacing: 10) {
                         Text("WELCOME")
@@ -87,8 +87,6 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.6))
                     }
                     .padding(.horizontal, 20)
-                    
-                    Spacer()
                     
                     // 组装按钮
                     Button(action: {
