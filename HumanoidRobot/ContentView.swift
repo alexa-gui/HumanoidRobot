@@ -921,7 +921,7 @@ struct KnowledgeView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(2)
                     }
-                    .padding(.top, 100)
+                    .padding(.top, 120)
                     
                     // 知识分类
                     ScrollView {
@@ -1461,7 +1461,7 @@ struct RobotSelectionView: View {
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
                     }
-                    .padding(.top, 100)
+                    .padding(.top, 120)
                     
                     Spacer()
                     
