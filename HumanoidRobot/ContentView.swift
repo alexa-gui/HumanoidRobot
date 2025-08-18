@@ -84,6 +84,8 @@ struct HomeView: View {
                     // 统一标题组件
                     MainTitle(title: "WELCOME", subtitle: "MODULAR ASSEMBLY")
                     
+                    Spacer().frame(height: 20) // 减少标题和机器人之间的间距
+                    
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
                         // 3D机器人视图
@@ -98,6 +100,8 @@ struct HomeView: View {
                             .foregroundColor(.white.opacity(0.6))
                     }
                     .padding(.horizontal, 20)
+                    
+                    Spacer().frame(height: 30) // 增加机器人和按钮之间的间距
                     
                     // 组装按钮
                     Button(action: {
@@ -131,7 +135,7 @@ struct HomeView: View {
                     
                     // 底部间距，确保不与Tab重叠
                     Spacer()
-                        .frame(height: 100)
+                        .frame(height: 60) // 减少底部间距，让按钮更靠上
                 }
             }
             .navigationBarHidden(true)
@@ -916,6 +920,8 @@ struct KnowledgeView: View {
                 VStack(spacing: 0) {
                     // 统一标题组件
                     MainTitle(title: "KNOWLEDGE", subtitle: "EMBODIED AI GUIDE")
+                    
+                    Spacer().frame(height: 40) // 增加标题和内容之间的间距
                     
                     // 知识分类
                     ScrollView {
