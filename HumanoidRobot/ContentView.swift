@@ -90,7 +90,7 @@ struct HomeView: View {
                     VStack(spacing: 5) { // 减少VStack间距
                         // 3D机器人视图
                         ModularRobot3DView()
-                            .frame(height: 350) // 减少机器人高度
+                            .frame(height: 300) // 进一步减少机器人高度
                             .onTapGesture {
                                 showingRobotDetail = true
                             }
@@ -201,12 +201,13 @@ struct ModularRobot3DView: UIViewRepresentable {
         
         // 创建模块化机器人
         let robotNode = createModularRobot()
+        robotNode.position = SCNVector3(0, -0.5, 0) // 将整个机器人向下移动
         scene.rootNode.addChildNode(robotNode)
         
         // 设置相机
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        cameraNode.position = SCNVector3(0, 1.5, 5) // 降低相机高度，让机器人更居中
+        cameraNode.position = SCNVector3(0, 1.0, 5) // 进一步降低相机高度
         scene.rootNode.addChildNode(cameraNode)
         
         // 设置灯光
