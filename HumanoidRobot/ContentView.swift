@@ -14,27 +14,24 @@ struct MainTitle: View {
     let subtitle: String
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 8) {
-                Text(title)
-                    .font(.system(size: 38, weight: .black, design: .monospaced))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [Color.mint, Color.cyan, Color.blue],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+        VStack(spacing: 8) {
+            Text(title)
+                .font(.system(size: 38, weight: .black, design: .monospaced))
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [Color.mint, Color.cyan, Color.blue],
+                        startPoint: .leading,
+                        endPoint: .trailing
                     )
-                
-                Text(subtitle)
-                    .font(.system(size: 16, weight: .medium, design: .monospaced))
-                    .foregroundColor(.white.opacity(0.8))
-                    .tracking(3)
-            }
-            .frame(maxWidth: .infinity, alignment: .center)
-            .position(x: geometry.size.width / 2, y: 120) // 绝对定位，确保所有页面标题在同一位置
+                )
+            
+            Text(subtitle)
+                .font(.system(size: 16, weight: .medium, design: .monospaced))
+                .foregroundColor(.white.opacity(0.8))
+                .tracking(3)
         }
-        .frame(height: 200) // 固定高度
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.top, 60) // 简单固定的顶部距离
     }
 }
 
@@ -83,7 +80,7 @@ struct HomeView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 25) {
+                VStack(spacing: 0) {
                     // 统一标题组件
                     MainTitle(title: "WELCOME", subtitle: "MODULAR ASSEMBLY")
                     
@@ -916,7 +913,7 @@ struct KnowledgeView: View {
             ZStack {
                 CyberpunkBackground()
                 
-                VStack(spacing: 25) {
+                VStack(spacing: 0) {
                     // 统一标题组件
                     MainTitle(title: "KNOWLEDGE", subtitle: "EMBODIED AI GUIDE")
                     
@@ -1441,7 +1438,7 @@ struct RobotSelectionView: View {
                 // 赛博朋克背景
                 CyberpunkBackground()
                 
-                VStack(spacing: 25) {
+                VStack(spacing: 0) {
                     // 统一标题组件
                     MainTitle(title: "ROBOT", subtitle: "COLLECTION")
                     
