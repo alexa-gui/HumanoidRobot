@@ -84,7 +84,7 @@ struct HomeView: View {
                     // 统一标题组件
                     MainTitle(title: "WELCOME", subtitle: "MODULAR ASSEMBLY")
                     
-                    Spacer().frame(height: 20) // 减少标题和机器人之间的间距
+                    Spacer().frame(height: 10) // 进一步减少标题和机器人之间的间距
                     
                     // 模块化机器人3D模型
                     VStack(spacing: 10) {
@@ -101,7 +101,7 @@ struct HomeView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    Spacer().frame(height: 30) // 增加机器人和按钮之间的间距
+                    Spacer().frame(height: 20) // 减少机器人和按钮之间的间距
                     
                     // 组装按钮
                     Button(action: {
@@ -135,7 +135,7 @@ struct HomeView: View {
                     
                     // 底部间距，确保不与Tab重叠
                     Spacer()
-                        .frame(height: 60) // 减少底部间距，让按钮更靠上
+                        .frame(height: 40) // 进一步减少底部间距，让整体更靠上
                 }
             }
             .navigationBarHidden(true)
