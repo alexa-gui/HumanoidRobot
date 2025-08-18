@@ -14,24 +14,27 @@ struct MainTitle: View {
     let subtitle: String
     
     var body: some View {
-        VStack(spacing: 8) {
-            Text(title)
-                .font(.system(size: 38, weight: .black, design: .monospaced))
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [Color.mint, Color.cyan, Color.blue],
-                        startPoint: .leading,
-                        endPoint: .trailing
+        GeometryReader { geometry in
+            VStack(spacing: 8) {
+                Text(title)
+                    .font(.system(size: 38, weight: .black, design: .monospaced))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [Color.mint, Color.cyan, Color.blue],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
                     )
-                )
-            
-            Text(subtitle)
-                .font(.system(size: 16, weight: .medium, design: .monospaced))
-                .foregroundColor(.white.opacity(0.8))
-                .tracking(3)
+                
+                Text(subtitle)
+                    .font(.system(size: 16, weight: .medium, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+                    .tracking(3)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
+            .position(x: geometry.size.width / 2, y: 120) // 绝对定位，确保所有页面标题在同一位置
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.top, 80) // 固定高度，确保对齐
+        .frame(height: 200) // 固定高度
     }
 }
 
