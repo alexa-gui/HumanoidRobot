@@ -31,7 +31,7 @@ struct MainTitle: View {
                 .tracking(3)
         }
         .frame(maxWidth: .infinity, alignment: .center)
-        .padding(.top, 60) // 简单固定的顶部距离
+        .padding(.top, 40) // 减少顶部距离，让标题更靠上
     }
 }
 
